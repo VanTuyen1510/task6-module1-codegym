@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button onclick ="addStudent()">Thêm mới học viên</button>
+<button onclick ="editStudent()">Sửa thông tin học viên</button>
+<button onclick ="deleteStudent()">Xóa học viên</button>
+<div id="display"></div>
+</body>
+<script>
+   class Student{
+       constructor(id,name,classroom,email,birthday) {
+           this.id = id;
+           this.name = name;
+           this.classroom = classroom;
+           this.email = email;
+           this.birthday = birthday;
+       }
+       setID(newID){
+           this.id = newID
+       }
+       setName(newName){
+           this.name = newName;
+       }
+       setClassroom(newClassroom){
+           this.classroom = newClassroom
+       }
+       setEmail(newEmail){
+          this.email = newEmail;
+       }
+       setBirthday(newBirthday){
+           this.birthday = newBirthday;
+       }
+       setModule(newModule){
+           this.module = newModule;
+       }
+   }
+   let st = [];
+   function tableStudent() {
+       let table = "<table border='1'>"
+       table += "<tr>"
+       table += "<th>" + "Mã học viên" + "</th>"
+       table += "<th>" + "Tên" + "</th>"
+       table += "<th>" + "Lớp" + "</th>"
+       table += "<th>" + "Email" + "</th>"
+       table += "<th>" + "Ngày sinh" + "</th>"
+       table += "<th>" + "Module" + "</th>"
+       table += "</tr>"
+
+       for (let i = 0; i < st.length ; i++) {
+           table += "<tr>"
+            table += "<td>" + st[i].id + "</td>"
+            table += "<td>" + st[i].name + "</td>"
+            table += "<td>" + st[i].classroom + "</td>"
+            table += "<td>" + st[i].email + "</td>"
+            table += "<td>" + st[i].birthday + "</td>"
+            table += "<td>" + st[i].module + "</td>"
+           table += "</tr>"
+       }
+       table += "</table>"
+           document.getElementById("display").innerHTML = table;
+
+   }
+
+
+
+
+   function editStudent() {
+       let edit = +prompt("Nhập thông tin muốn sửa");
+       for (let i = 0; i < st.length ; i++) {
+           if(st[i].id === formatID(edit)) {
+               let name;
+               do{
+                   name = prompt("Nhập lại họ và tên học viên");
+               }
+               while (checkName(name));
+               st[i].setName(name);
+
+               let classroom = prompt("Nhập lớp");
+               st[i].setClassroom(classroom);
+
+               let email = prompt("Nhập email");
+               st[i].setEmail(email);
+
+               let birthday = prompt("Nhập ngày tháng");
+               st[i].setBirthday(birthday);
+
+
+               let module;
+               do{
+                   module = prompt("Nhập lại module của học viên");
+               }
+               while (checkModule(module));
+               st[i].setModule(module);
+
+
+               tableStudent();
+               return st;
+           }
+       }
+       alert("Mã không tồn tại");
+   }
+
+
+
+   function deleteStudent() {
+       let del = +prompt("Nhập thông tin muốn xóa");
+       for (let i = 0 ; i <st.length;i++){
+           if(st[i].id === formatID(del)){
+               if(confirm("Bạn thật sự muốn xóa")){
+                   st.splice(i,1);
+                   tableStudent();
+                   return st;
+               };
+           };
+       };
+       alert("Mã không tồn tại");
+   };
+
+   function formatID(number) {
+      if(number < 10){
+          return "HV-000" + number;
+      }else if(number < 100){
+          return "HV-00" + number;
+      }else if(number < 1000){
+          return "HV-0" + number;
+      }else {
+          return "HV" + number;
+      };
+   };
+
+   function checkId(str) {
+       if(st.length > 0){
+           for (let i = 0; i < st.length ; i++) {
+               if (str === st[i].id){
+                   alert("Mã học viên đã có trong danh sách");
+                   return true;
+               }
+
+           }
+       }
+   }
+
+
+   function checkName(str) {
+       if (str.length > 50){
+           alert("Tên học viên chỉ tối đa 50 ký tự");
+           return true;
+       }
+   }
+
+   function checkModule(num) {
+       if(num >= 7){
+           alert("Module chỉ nhập từ 1 đến 6");
+           return true;
+       }
+   }
+
+   function formatBirthday(date) {
+      return date.slice(0,2) + "/" + date.slice(2,4) + "/" + date.slice(4,8);
+   }
+
+
+   function addStudent() {
+       let child = new Student();
+
+       let inputID;
+       do {
+           inputID = +prompt("Nhập ID vào :");
+           child.id = formatID(inputID);
+       }
+       while (checkId(inputID))
+
+
+       let inputName;
+       do {
+           inputName = prompt("Nhập họ và tên học sinh vào :");
+
+       }
+       while (checkName(inputName))
+       {
+           child.setName(inputName);
+
+       }
+
+
+       child.classroom = prompt("Nhập lớp vào");
+       child.email = prompt("Nhập email vào :");
+
+
+       child.birthday = prompt("Nhập ngày sinh vào :");
+       child.setBirthday(formatBirthday(child.birthday));
+
+
+
+       let inputModule;
+       do {
+           inputModule= prompt("Nhập module của bạn vào");
+       }
+       while (checkModule(inputModule)){
+           child.setModule(inputModule)
+         }
+
+
+
+       st.push(child);
+       tableStudent();
+       return st;
+   }
+
+
+
+
+
+
+
+</script>
+
+</html>
